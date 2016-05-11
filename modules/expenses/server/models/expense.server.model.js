@@ -36,7 +36,6 @@ var ExpenseSchema = new Schema({
   isRecurring: {
     type: Number,
     default: 0
-
   },
   created: {
     type: Date,

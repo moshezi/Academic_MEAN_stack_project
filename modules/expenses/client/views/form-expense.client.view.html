@@ -12,6 +12,25 @@
             <p class="help-block error-text" ng-message="required">Expense name is required.</p>
           </div>
         </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Amount</label>
+          <input name="amount" type="text" ng-model="vm.expense.amount" id="amount" class="form-control" placeholder="Sum of expense" required>
+          <div ng-messages="vm.form.expenseForm.amount.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Amount of expense is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Picture path</label>
+          <input name="picPath" type="text" ng-model="vm.expense.picPath" id="picPath" class="form-control" placeholder="Picture path">
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Months recurring</label>
+          <input name="isRecurring" type="text" ng-model="vm.expense.isRecurring" id="isRecurring" class="form-control" placeholder="How many months is the expense recurring? (leave blank if just this month)">
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Comments</label>
+          <input name="comments" type="text" ng-model="vm.expense.comments" id="comments" class="form-control" placeholder="Comments">
+        </div>
         <div class="form-group">
           <button type="submit" class="btn btn-default">{{vm.expense._id ? 'Update' : 'Create'}}</button>
         </div>
