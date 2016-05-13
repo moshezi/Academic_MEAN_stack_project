@@ -1,2 +1,2 @@
 #web: ./node_modules/.bin/forever -m 5 server.js
-grunt prod
+./node_modules/grunt-cli/bin/grunt prod
