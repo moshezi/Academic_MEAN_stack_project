@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * Module dependencies.
- */
+* Module dependencies.
+*/
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   crypto = require('crypto'),
@@ -11,22 +11,22 @@ var mongoose = require('mongoose'),
   owasp = require('owasp-password-strength-test');
 
 /**
- * A Validation function for local strategy properties
- */
+* A Validation function for local strategy properties
+*/
 var validateLocalStrategyProperty = function (property) {
   return ((this.provider !== 'local' && !this.updated) || property.length);
 };
 
 /**
- * A Validation function for local strategy email
- */
+* A Validation function for local strategy email
+*/
 var validateLocalStrategyEmail = function (email) {
   return ((this.provider !== 'local' && !this.updated) || validator.isEmail(email));
 };
 
 /**
- * User Schema
- */
+* User Schema
+*/
 var UserSchema = new Schema({
   firstName: {
     type: String,
@@ -91,6 +91,10 @@ var UserSchema = new Schema({
   updated: {
     type: Date
   },
+  advisor: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
   created: {
     type: Date,
     default: Date.now
@@ -105,8 +109,8 @@ var UserSchema = new Schema({
 });
 
 /**
- * Hook a pre save method to hash the password
- */
+* Hook a pre save method to hash the password
+*/
 UserSchema.pre('save', function (next) {
   if (this.password && this.isModified('password')) {
     this.salt = crypto.randomBytes(16).toString('base64');
@@ -116,9 +120,19 @@ UserSchema.pre('save', function (next) {
   next();
 });
 
+
+var autoPopulateAdvisor = function(next) {
+  this.populate('advisor', 'displayName');
+  next();
+};
+
+UserSchema
+.pre('findOne', autoPopulateAdvisor)
+.pre('find', autoPopulateAdvisor);
+
 /**
- * Hook a pre validate method to test the local password
- */
+* Hook a pre validate method to test the local password
+*/
 UserSchema.pre('validate', function (next) {
   if (this.provider === 'local' && this.password && this.isModified('password')) {
     var result = owasp.test(this.password);
@@ -132,8 +146,8 @@ UserSchema.pre('validate', function (next) {
 });
 
 /**
- * Create instance method for hashing a password
- */
+* Create instance method for hashing a password
+*/
 UserSchema.methods.hashPassword = function (password) {
   if (this.salt && password) {
     return crypto.pbkdf2Sync(password, new Buffer(this.salt, 'base64'), 10000, 64).toString('base64');
@@ -143,15 +157,15 @@ UserSchema.methods.hashPassword = function (password) {
 };
 
 /**
- * Create instance method for authenticating user
- */
+* Create instance method for authenticating user
+*/
 UserSchema.methods.authenticate = function (password) {
   return this.password === this.hashPassword(password);
 };
 
 /**
- * Find possible not used username
- */
+* Find possible not used username
+*/
 UserSchema.statics.findUniqueUsername = function (username, suffix, callback) {
   var _this = this;
   var possibleUsername = username.toLowerCase() + (suffix || '');

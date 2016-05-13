@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Module dependencies.
+ * Module dependencies
  */
 var acl = require('acl');
 
@@ -9,41 +9,54 @@ var acl = require('acl');
 acl = new acl(new acl.memoryBackend());
 
 /**
- * Invoke Admin Permissions
+ * Invoke Customers Permissions
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
     roles: ['admin'],
     allows: [{
-      resources: '/api/users',
+      resources: '/api/customers',
       permissions: '*'
     }, {
-      resources: '/api/users/:userId',
+      resources: '/api/customers/:customerId',
       permissions: '*'
     }]
-  },
-  {
-    roles: ['guest', 'user'],
+  }, {
+    roles: ['user'],
     allows: [{
-      resources: '/api/users',
-      permissions: 'get'
+      resources: '/api/customers',
+      permissions: ['get', 'post']
     }, {
-      resources: '/api/users/:userId',
-      permissions: 'get'
+      resources: '/api/customers/:customerId',
+      permissions: ['get']
+    }]
+  }, {
+    roles: ['guest'],
+    allows: [{
+      resources: '/api/customers',
+      permissions: ['*']
+    }, {
+      resources: '/api/customers/:customerId',
+      permissions: ['*']
     }]
   }]);
 };
 
 /**
- * Check If Admin Policy Allows
+ * Check If Customers Policy Allows
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 
+  // If an Customer is being processed and the current user created it then allow any manipulation
+  if (req.customer && req.user && req.customer.user && req.customer.user.id === req.user.id) {
+    return next();
+  }
+
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
     if (err) {
-      // An authorization error occurred.
+      // An authorization error occurred
       return res.status(500).send('Unexpected authorization error');
     } else {
       if (isAllowed) {

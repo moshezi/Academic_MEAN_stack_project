@@ -2,8 +2,8 @@
   'use strict';
 
   angular
-    .module('expenses')
-    .run(menuConfig);
+  .module('expenses')
+  .run(menuConfig);
 
   menuConfig.$inject = ['Menus'];
 
@@ -13,20 +13,28 @@
       title: 'Expenses',
       state: 'expenses',
       type: 'dropdown',
-      roles: ['user']
+      roles: ['admin', 'customer']
     });
 
     // Add the dropdown list item
     Menus.addSubMenuItem('topbar', 'expenses', {
       title: 'List Expenses',
-      state: 'expenses.list'
+      state: 'expenses.list',
+      roles: ['admin', 'customer']
+    });
+
+    // Add the dropdown create item
+    Menus.addSubMenuItem('topbar', 'expenses', {
+      title: 'Manage Advisors',
+      state: 'expenses.advisors',
+      roles: ['admin', 'customer']
     });
 
     // Add the dropdown create item
     Menus.addSubMenuItem('topbar', 'expenses', {
       title: 'Create Expense',
       state: 'expenses.create',
-      roles: ['user']
+      roles: ['admin', 'customer']
     });
   }
 })();

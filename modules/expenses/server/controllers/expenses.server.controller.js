@@ -27,6 +27,7 @@ exports.create = function(req, res) {
   });
 };
 
+
 /**
  * Show the current Expense
  */
@@ -82,7 +83,7 @@ exports.delete = function(req, res) {
  * List of Expenses
  */
 exports.list = function(req, res) {
-  Expense.find().sort('-created').populate('user', 'displayName').exec(function(err, expenses) {
+  Expense.find().sort('-created').populate('user', 'displayName').populate('advisor', 'displayName').exec(function(err, expenses) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

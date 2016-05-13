@@ -26,7 +26,8 @@ var ExpenseSchema = new Schema({
     default: '',
   },
   expenseDate: {
-    type: Number    
+    type: Number,
+    default: Date.now
   },
   comments: {
     type: String,
