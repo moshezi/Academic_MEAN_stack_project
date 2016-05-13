@@ -28,9 +28,11 @@ exports.signup = function (req, res) {
   var user = new User(req.body);
   var message = null;
 
-
+  console.dir(req.body);
   if (isAdvisor)
     user.roles.push("advisor");
+  else
+    user.roles.push("customer");
 
   // Add missing user fields
   user.provider = 'local';

@@ -49,6 +49,7 @@ exports.update = function(req, res) {
 
   expense = _.extend(expense , req.body);
 
+  expense.updatedAt = Date.now();
   expense.save(function(err) {
     if (err) {
       return res.status(400).send({
@@ -80,7 +81,7 @@ exports.delete = function(req, res) {
 /**
  * List of Expenses
  */
-exports.list = function(req, res) { 
+exports.list = function(req, res) {
   Expense.find().sort('-created').populate('user', 'displayName').exec(function(err, expenses) {
     if (err) {
       return res.status(400).send({
