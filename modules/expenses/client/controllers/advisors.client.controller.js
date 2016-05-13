@@ -22,7 +22,7 @@
     };
 
     var fixAdvisors = function () {
-      $scope.users.map(() => function(user) {
+      $scope.users.map(function(user) {
         if (user._id === Authentication.user._id) {
           $scope.advisor = Authentication.user.advisor;
           return;
