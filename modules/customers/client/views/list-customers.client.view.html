@@ -23,13 +23,10 @@
     data-ui-sref="expenses.view({ expenseId: expense._id })"
     class="list-group-item">
     <small class="list-group-item-text" data-ng-if="vm.currentCustomer._id==expense.user._id">
-      Posted on
-      <span data-ng-bind="expense.created | date:'mediumDate'"></span>
-      by
       <span data-ng-if="expense.user" data-ng-bind="expense.user.displayName"></span>
       <span data-ng-if="!expense.user">Deleted User</span>
     </small>
-    <h4 class="list-group-item-heading" data-ng-bind="expense.name"></h4>
+    <h3 class="list-group-item-heading" data-ng-bind="expense.name"></h3><h4 class="list-group-item-heading" data-ng-bind="expense.amount"></h4>
   </a>
 </div>
 
