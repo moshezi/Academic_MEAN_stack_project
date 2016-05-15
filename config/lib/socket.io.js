@@ -16,6 +16,7 @@ var config = require('../config'),
 module.exports = function (app, db) {
   var server;
   if (config.secure && config.secure.ssl === true) {
+    console.log('SSL IS ON');
     // Load SSL key and certificate
     var privateKey = fs.readFileSync(path.resolve(config.secure.privateKey), 'utf8');
     var certificate = fs.readFileSync(path.resolve(config.secure.certificate), 'utf8');
@@ -54,6 +55,7 @@ module.exports = function (app, db) {
     // Create new HTTPS Server
     server = https.createServer(options, app);
   } else {
+    console.log('SSL IS OFF');
     // Create a new HTTP server
     server = http.createServer(app);
   }
