@@ -908,7 +908,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
 })()
 
 (function() {
-'use strict'
+'use strict';
 
 angular
   .module('customers')
