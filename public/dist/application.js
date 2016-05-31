@@ -907,6 +907,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   }
 })()
 
+(function() {
 'use strict'
 
 angular
@@ -935,88 +936,91 @@ angular
       vm.customer = customerResolve;
 
       vm.getExpensesForCustomer = expensesResolve.data;
-    }])
+    }]);
+})();
+(function () {
+  'use strict';
 
-'use strict';
+  // Customers controller
+  angular
+    .module('customers')
+    .controller('CustomersController', CustomersController);
 
-// Customers controller
-angular
-  .module('customers')
-  .controller('CustomersController', CustomersController);
+  CustomersController.$inject = ['$scope', '$state', 'Authentication', 'customerResolve'];
 
-CustomersController.$inject = ['$scope', '$state', 'Authentication', 'customerResolve'];
+  function CustomersController($scope, $state, Authentication, customer) {
+    var vm = this;
 
-function CustomersController($scope, $state, Authentication, customer) {
-  var vm = this;
+    vm.authentication = Authentication;
+    vm.customer = customer;
+    vm.error = null;
+    vm.form = {};
+    vm.remove = remove;
+    vm.save = save;
 
-  vm.authentication = Authentication;
-  vm.customer = customer;
-  vm.error = null;
-  vm.form = {};
-  vm.remove = remove;
-  vm.save = save;
-
-  // Remove existing Customer
-  function remove() {
-    if (confirm('Are you sure you want to delete?')) {
-      vm.customer.$remove($state.go('customers.list'));
-    }
-  }
-
-  // Save Customer
-  function save(isValid) {
-    if (!isValid) {
-      $scope.$broadcast('show-errors-check-validity', 'vm.form.customerForm');
-      return false;
+    // Remove existing Customer
+    function remove() {
+      if (confirm('Are you sure you want to delete?')) {
+        vm.customer.$remove($state.go('customers.list'));
+      }
     }
 
-    // TODO: move create/update logic to service
-    if (vm.customer._id) {
-      vm.customer.$update(successCallback, errorCallback);
-    } else {
-      vm.customer.$save(successCallback, errorCallback);
-    }
+    // Save Customer
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.customerForm');
+        return false;
+      }
 
-    function successCallback(res) {
-      $state.go('customers.view', {
-        customerId: res._id
-      });
-    }
+      // TODO: move create/update logic to service
+      if (vm.customer._id) {
+        vm.customer.$update(successCallback, errorCallback);
+      } else {
+        vm.customer.$save(successCallback, errorCallback);
+      }
 
-    function errorCallback(res) {
-      vm.error = res.data.message;
-    }
-  }
-};
-'use strict'
+      function successCallback(res) {
+        $state.go('customers.view', {
+          customerId: res._id
+        });
+      }
 
-angular
-  .module('customers')
-  .controller('CustomersListController',
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+    }
+  };
+})();
+(function () {
+  'use strict';
+
+  angular
+    .module('customers')
+    .controller('CustomersListController',
     ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout',
       function ($scope, CustomersService, ExpensesService, $http, $timeout) {
-        var vm = this
-        vm.scope = $scope
+        var vm = this;
+        vm.scope = $scope;
 
         CustomersService.query(function (results) {
           vm.customers = results
-        })
+        });
         ExpensesService.query(function (results) {
           vm.expenses = results
-        })
+        });
 
         vm.showGraph = function (customer) {
-          
+
         };
 
         vm.getExpensesForCustomer = function (customerId) {
           vm.currentCustomerExpenses = []
           $http.get('/api/user-expenses/' + customerId).then(function (results) {
-            $timeout(function () {vm.currentCustomerExpenses = results.data})
+            $timeout(function () { vm.currentCustomerExpenses = results.data })
           })
         }
-      }])
-
+      }]);
+})();
 //Customers service used to communicate Customers REST endpoints
 (function () {
   'use strict';
