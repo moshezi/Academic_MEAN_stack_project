@@ -1,3 +1,4 @@
+(function() {
 'use strict'
 
 angular
@@ -26,4 +27,5 @@ angular
       vm.customer = customerResolve;
 
       vm.getExpensesForCustomer = expensesResolve.data;
-    }])
+    }]);
+})();
