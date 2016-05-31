@@ -1,16 +1,26 @@
-(function () {
-  'use strict';
+
+  'use strict'
 
   angular
     .module('customers')
-    .controller('CustomersListController', CustomersListController);
+    .controller('CustomersListController',
+      ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout',
+        function ($scope, CustomersService, ExpensesService, $http, $timeout) {
+          var vm = this;
+          vm.scope = $scope;
 
-  CustomersListController.$inject = ['CustomersService', 'ExpensesService'];
+          CustomersService.query(function (results) {
+            vm.customers = results
+          })
+          ExpensesService.query(function (results) {
+            vm.expenses = results
+          })
 
-  function CustomersListController(CustomersService, ExpensesService) {
-    var vm = this;
+          vm.getExpensesForCustomer = function (customerId) {
+            vm.currentCustomerExpenses = []
+            $http.get('/api/user-expenses/' + customerId).then(function (results) {
+              $timeout(function() {vm.currentCustomerExpenses = results.data});
+            });
+          }
+        }]);
 
-    vm.customers = CustomersService.query();
-    vm.expenses = ExpensesService.query();
-  }
-})();

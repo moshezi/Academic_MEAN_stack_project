@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Module dependencies.
@@ -7,113 +7,132 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Expense = mongoose.model('Expense'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  _ = require('lodash');
+  _ = require('lodash')
 
 /**
  * Create a Expense
  */
-exports.create = function(req, res) {
-  var expense = new Expense(req.body);
-  expense.user = req.user;
+exports.create = function (req, res) {
+  var expense = new Expense(req.body)
+  expense.user = req.user
 
-  expense.save(function(err) {
+  expense.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
-      });
+      })
     } else {
-      res.jsonp(expense);
+      res.jsonp(expense)
     }
-  });
-};
-
+  })
+}
 
 /**
  * Show the current Expense
  */
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   // convert mongoose document to JSON
-  var expense = req.expense ? req.expense.toJSON() : {};
+  var expense = req.expense ? req.expense.toJSON() : {}
 
   // Add a custom field to the Article, for determining if the current User is the "owner".
   // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
-  expense.isCurrentUserOwner = req.user && expense.user && expense.user._id.toString() === req.user._id.toString() ? true : false;
+  expense.isCurrentUserOwner = req.user && expense.user && expense.user._id.toString() === req.user._id.toString() ? true : false
 
-  res.jsonp(expense);
-};
+  res.jsonp(expense)
+}
 
 /**
  * Update a Expense
  */
-exports.update = function(req, res) {
-  var expense = req.expense ;
+exports.update = function (req, res) {
+  var expense = req.expense
 
-  expense = _.extend(expense , req.body);
+  expense = _.extend(expense , req.body)
 
-  expense.updatedAt = Date.now();
-  expense.save(function(err) {
+  expense.updatedAt = Date.now()
+  expense.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
-      });
+      })
     } else {
-      res.jsonp(expense);
+      res.jsonp(expense)
     }
-  });
-};
+  })
+}
 
 /**
  * Delete an Expense
  */
-exports.delete = function(req, res) {
-  var expense = req.expense ;
+exports.delete = function (req, res) {
+  var expense = req.expense
 
-  expense.remove(function(err) {
+  expense.remove(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
-      });
+      })
     } else {
-      res.jsonp(expense);
+      res.jsonp(expense)
     }
-  });
-};
+  })
+}
 
 /**
  * List of Expenses
  */
-exports.list = function(req, res) {
-  Expense.find().sort('-created').populate('user', 'displayName').populate('advisor', 'displayName').exec(function(err, expenses) {
+exports.list = function (req, res) {
+  Expense.find().sort('-created').populate('user', 'displayName').populate('advisor', 'displayName').exec(function (err, expenses) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
-      });
+      })
     } else {
-      res.jsonp(expenses);
+      res.jsonp(expenses)
     }
-  });
-};
+  })
+}
 
 /**
  * Expense middleware
  */
-exports.expenseByID = function(req, res, next, id) {
+exports.expenseByUserID = function (req, res, next, id) {
+  var results = [];
+  Expense.find({ 'user': id }).populate('user', 'displayName').exec(function (err, expenses) {
+    if (err) {
+      return next(err)
+    } else if (!expenses) {
+      return res.status(404).send({
+        message: 'No Expenses with that user identifier has been found'
+      })
+    }
+    
+    expenses.map(function(expense) {
+      results.push(expense.toJSON());
+    });
+    res.jsonp(results);
+  })
+}
 
+/**
+ * Expense middleware
+ */
+exports.expenseByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'Expense is invalid'
-    });
+    })
   }
 
   Expense.findById(id).populate('user', 'displayName').exec(function (err, expense) {
     if (err) {
-      return next(err);
+      return next(err)
     } else if (!expense) {
       return res.status(404).send({
         message: 'No Expense with that identifier has been found'
-      });
+      })
     }
-    req.expense = expense;
-    next();
-  });
-};
+    req.expense = expense
+    next()
+  })
+}

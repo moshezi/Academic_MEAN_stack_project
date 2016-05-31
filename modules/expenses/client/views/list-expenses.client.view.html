@@ -3,7 +3,7 @@
     <h1>Expenses</h1>
   </div>
   <div class="list-group">
-    <a data-ng-repeat="expense in vm.expenses"
+    <a data-ng-repeat="expense in vm.currentCustomerExpenses"
        data-ui-sref="expenses.view({ expenseId: expense._id })"
        class="list-group-item">
       <small class="list-group-item-text">

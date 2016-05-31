@@ -12,9 +12,11 @@
     <h3 class="text-center"></h3>
     <div class="list-group">
       <a ng-repeat="user in users | filter: isUserAdvisor"  class="list-group-item">
-          <small class="list-group-item-text" ng-click="chooseAdvisor(user)">
+        <div class="advisor-row" ng-click="chooseAdvisor(user)">
+          <small class="list-group-item-text">
             <span ng-bind="user.displayName"></span>
           </small>
+          </div>
           <!-- <h4 class="list-group-item-heading" ng-bind="article.title"></h4>
           <p class="list-group-item-text" ng-bind="article.content"></p> -->
       </a>
