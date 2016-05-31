@@ -942,22 +942,32 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   }
 })();
 
-(function () {
-  'use strict';
+
+  'use strict'
 
   angular
     .module('customers')
-    .controller('CustomersListController', CustomersListController);
+    .controller('CustomersListController',
+      ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout',
+        function ($scope, CustomersService, ExpensesService, $http, $timeout) {
+          var vm = this;
+          vm.scope = $scope;
 
-  CustomersListController.$inject = ['CustomersService', 'ExpensesService'];
+          CustomersService.query(function (results) {
+            vm.customers = results
+          })
+          ExpensesService.query(function (results) {
+            vm.expenses = results
+          })
 
-  function CustomersListController(CustomersService, ExpensesService) {
-    var vm = this;
+          vm.getExpensesForCustomer = function (customerId) {
+            vm.currentCustomerExpenses = []
+            $http.get('/api/user-expenses/' + customerId).then(function (results) {
+              $timeout(function() {vm.currentCustomerExpenses = results.data});
+            });
+          }
+        }]);
 
-    vm.customers = CustomersService.query();
-    vm.expenses = ExpensesService.query();
-  }
-})();
 
 //Customers service used to communicate Customers REST endpoints
 (function () {
@@ -1201,21 +1211,26 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   }
 })();
 
-(function () {
-  'use strict';
+'use strict'
 
-  angular
-    .module('expenses')
-    .controller('ExpensesListController', ExpensesListController);
+angular
+  .module('expenses')
+  .controller('ExpensesListController',
+    ['ExpensesService', 'Authentication', '$http', '$timeout',
+      function (ExpensesService, Authentication, $http, $timeout) {
+        var vm = this
 
-  ExpensesListController.$inject = ['ExpensesService'];
+        vm.expenses = ExpensesService.query()
 
-  function ExpensesListController(ExpensesService) {
-    var vm = this;
+        vm.currentCustomerExpenses = []
 
-    vm.expenses = ExpensesService.query();
-  }
-})();
+
+        if (Authentication.user) {
+          $http.get('/api/user-expenses/' + Authentication.user._id).then(function (results) {
+            $timeout(function () {vm.currentCustomerExpenses = results.data})
+          })
+        }
+      }])
 
 //Expenses service used to communicate Expenses REST endpoints
 (function () {
