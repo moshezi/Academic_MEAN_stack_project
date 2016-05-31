@@ -10,10 +10,10 @@
         vm.scope = $scope;
 
         CustomersService.query(function (results) {
-          vm.customers = results
+          vm.customers = results;
         });
         ExpensesService.query(function (results) {
-          vm.expenses = results
+          vm.expenses = results;
         });
 
         vm.showGraph = function (customer) {
@@ -21,10 +21,10 @@
         };
 
         vm.getExpensesForCustomer = function (customerId) {
-          vm.currentCustomerExpenses = []
+          vm.currentCustomerExpenses = [];
           $http.get('/api/user-expenses/' + customerId).then(function (results) {
-            $timeout(function () { vm.currentCustomerExpenses = results.data })
-          })
-        }
+            $timeout(function () { vm.currentCustomerExpenses = results.data; });
+          });
+        };
       }]);
 })();

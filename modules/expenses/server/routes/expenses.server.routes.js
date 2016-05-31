@@ -18,7 +18,7 @@ module.exports = function(app) {
     .delete(expenses.delete);
     
   app.route('/api/user-expenses/:userId').all(expensesPolicy.isAllowed)
-    .get(expenses.read)
+    .get(expenses.read);
   
   app.param('userId', expenses.expenseByUserID);
   // Finish by binding the Expense middleware

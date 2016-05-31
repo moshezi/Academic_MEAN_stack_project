@@ -49,5 +49,5 @@
         vm.error = res.data.message;
       }
     }
-  };
+  }
 })();

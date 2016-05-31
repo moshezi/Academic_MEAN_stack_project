@@ -1,31 +1,31 @@
-(function() {
-'use strict';
+(function () {
+  'use strict';
 
-angular
-  .module('customers')
-  .controller('CustomersGraphController',
-  ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
-    function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
-      var vm = this
-      $scope.labels = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
-      $scope.data = [300, 500, 100];
+  angular
+    .module('customers')
+    .controller('CustomersGraphController',
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+        var vm = this;
+        $scope.labels = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
+        $scope.data = [300, 500, 100];
 
-      $scope.$back = function () {
-        window.history.back();
-      }
-      
-      vm.scopep = $scope;
+        $scope.$back = function () {
+          window.history.back();
+        };
 
-      CustomersService.query(function (results) {
-        vm.customers = results;
-      })
+        vm.scopep = $scope;
 
-      ExpensesService.query(function (results) {
-        vm.expenses = results;
-      });
+        CustomersService.query(function (results) {
+          vm.customers = results;
+        });
 
-      vm.customer = customerResolve;
+        ExpensesService.query(function (results) {
+          vm.expenses = results;
+        });
 
-      vm.getExpensesForCustomer = expensesResolve.data;
-    }]);
+        vm.customer = customerResolve;
+
+        vm.getExpensesForCustomer = expensesResolve.data;
+      }]);
 })();

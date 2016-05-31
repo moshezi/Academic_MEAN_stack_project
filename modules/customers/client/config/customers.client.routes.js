@@ -1,11 +1,11 @@
 ;(function () {
-  'use strict'
+  'use strict';
 
   angular
     .module('customers')
-    .config(routeConfig)
+    .config(routeConfig);
 
-  routeConfig.$inject = ['$stateProvider']
+  routeConfig.$inject = ['$stateProvider'];
 
   function routeConfig ($stateProvider) {
     $stateProvider
@@ -47,25 +47,25 @@
         data: {
           pageTitle: 'Customer {{ articleResolve.name }}'
         }
-      })
+      });
   }
 
-  getExpenses.$inject = ['$stateParams', '$http']
+  getExpenses.$inject = ['$stateParams', '$http'];
 
   function getCustomer ($stateParams, CustomersService) {
     return CustomersService.get({
       customerId: $stateParams.customerId
-    }).$promise
+    }).$promise;
   }
 
   function getExpenses ($stateParams, $http) {
-    var customerId = $stateParams.customerId
+    var customerId = $stateParams.customerId;
     return $http.get('/api/user-expenses/' +customerId);
   }
 
-  newCustomer.$inject = ['CustomersService']
+  newCustomer.$inject = ['CustomersService'];
 
   function newCustomer (CustomersService) {
-    return new CustomersService()
+    return new CustomersService();
   }
-})()
+})();
