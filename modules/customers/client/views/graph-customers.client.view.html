@@ -1,0 +1,58 @@
+<section>
+    <div class="page-header">
+        <h1>Statistics - <i>{{ vm.customer.firstName }}</i></h1>
+    </div>
+    <div ng-show="!vm.getExpensesForCustomer || vm.getExpensesForCustomer.length == 0">
+        <h4>No Expenses for user {{ vm.customer.firstName }}!</h4>
+    </div>
+    <div ng-show="vm.getExpensesForCustomer && vm.getExpensesForCustomer.length > 0">
+
+        <div class="row">
+            <div class="col-lg-3 col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Weekly expenses (Category 1)</div>
+                    <div class="panel-body">
+                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Weekly expenses (Category 2)</div>
+                    <div class="panel-body">
+                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Weekly expenses (Category 3)</div>
+                    <div class="panel-body">
+                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Weekly expenses (Category 4)</div>
+                    <div class="panel-body">
+                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Monthly expenses (All categories)</div>
+                    <div class="panel-body">
+                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a class="graphs-back" ng-click="$back()">Back</a>
+</section>

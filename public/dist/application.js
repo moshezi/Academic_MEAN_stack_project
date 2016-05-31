@@ -123,7 +123,7 @@ ApplicationConfiguration.registerModule('core.admin.routes', ['ui.router']);
 (function (app) {
   'use strict';
 
-  app.registerModule('customers');
+  app.registerModule('customers', ['chart.js']);
 })(ApplicationConfiguration);
 
 (function (app) {
@@ -834,16 +834,17 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   }
 })();
 
-(function () {
-  'use strict';
+;(function () {
+  'use strict'
 
+  getCustomer.$inject = ["$stateParams", "CustomersService"];
   angular
     .module('customers')
-    .config(routeConfig);
+    .config(routeConfig)
 
-  routeConfig.$inject = ['$stateProvider'];
+  routeConfig.$inject = ['$stateProvider']
 
-  function routeConfig($stateProvider) {
+  function routeConfig ($stateProvider) {
     $stateProvider
       .state('customers', {
         abstract: true,
@@ -859,6 +860,19 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
           pageTitle: 'Customers List'
         }
       })
+      .state('customers.graph', {
+        url: '/:customerId',
+        templateUrl: 'modules/customers/client/views/graph-customers.client.view.html',
+        controller: 'CustomersGraphController',
+        controllerAs: 'vm',
+        resolve: {
+          customerResolve: getCustomer,
+          expensesResolve: getExpenses
+        },
+        data: {
+          pageTitle: 'Customer {{ articleResolve.name }}'
+        }
+      })
       .state('customers.view', {
         url: '/:customerId',
         templateUrl: 'modules/customers/client/views/view-customer.client.view.html',
@@ -867,26 +881,61 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         resolve: {
           customerResolve: getCustomer
         },
-        data:{
+        data: {
           pageTitle: 'Customer {{ articleResolve.name }}'
         }
-      });
+      })
   }
 
-  getCustomer.$inject = ['$stateParams', 'CustomersService'];
+  getExpenses.$inject = ['$stateParams', '$http']
 
-  function getCustomer($stateParams, CustomersService) {
+  function getCustomer ($stateParams, CustomersService) {
     return CustomersService.get({
       customerId: $stateParams.customerId
-    }).$promise;
+    }).$promise
   }
 
-  newCustomer.$inject = ['CustomersService'];
-
-  function newCustomer(CustomersService) {
-    return new CustomersService();
+  function getExpenses ($stateParams, $http) {
+    var customerId = $stateParams.customerId
+    return $http.get('/api/user-expenses/' +customerId);
   }
-})();
+
+  newCustomer.$inject = ['CustomersService']
+
+  function newCustomer (CustomersService) {
+    return new CustomersService()
+  }
+})()
+
+'use strict'
+
+angular
+  .module('customers')
+  .controller('CustomersGraphController',
+  ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
+    function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+      var vm = this
+      $scope.labels = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
+      $scope.data = [300, 500, 100];
+
+      $scope.$back = function () {
+        window.history.back();
+      }
+      
+      vm.scopep = $scope;
+
+      CustomersService.query(function (results) {
+        vm.customers = results;
+      })
+
+      ExpensesService.query(function (results) {
+        vm.expenses = results;
+      });
+
+      vm.customer = customerResolve;
+
+      vm.getExpensesForCustomer = expensesResolve.data;
+    }])
 
 (function () {
   'use strict';
@@ -942,32 +991,34 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   }
 })();
 
+'use strict'
 
-  'use strict'
+angular
+  .module('customers')
+  .controller('CustomersListController',
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout) {
+        var vm = this
+        vm.scope = $scope
 
-  angular
-    .module('customers')
-    .controller('CustomersListController',
-      ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout',
-        function ($scope, CustomersService, ExpensesService, $http, $timeout) {
-          var vm = this;
-          vm.scope = $scope;
+        CustomersService.query(function (results) {
+          vm.customers = results
+        })
+        ExpensesService.query(function (results) {
+          vm.expenses = results
+        })
 
-          CustomersService.query(function (results) {
-            vm.customers = results
+        vm.showGraph = function (customer) {
+          
+        };
+
+        vm.getExpensesForCustomer = function (customerId) {
+          vm.currentCustomerExpenses = []
+          $http.get('/api/user-expenses/' + customerId).then(function (results) {
+            $timeout(function () {vm.currentCustomerExpenses = results.data})
           })
-          ExpensesService.query(function (results) {
-            vm.expenses = results
-          })
-
-          vm.getExpensesForCustomer = function (customerId) {
-            vm.currentCustomerExpenses = []
-            $http.get('/api/user-expenses/' + customerId).then(function (results) {
-              $timeout(function() {vm.currentCustomerExpenses = results.data});
-            });
-          }
-        }]);
-
+        }
+      }])
 
 //Customers service used to communicate Customers REST endpoints
 (function () {

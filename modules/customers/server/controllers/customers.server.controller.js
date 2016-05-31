@@ -91,7 +91,7 @@ exports.customerByID = function (req, res, next, id) {
     })
   }
 
-  Customer.findById(id).populate('user', 'displayName').exec(function (err, customer) {
+  User.findById(id).populate('advisor', 'displayName').exec(function (err, customer) {
     if (err) {
       return next(err)
     } else if (!customer) {

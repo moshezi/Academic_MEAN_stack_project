@@ -1,13 +1,13 @@
-(function () {
-  'use strict';
+;(function () {
+  'use strict'
 
   angular
     .module('customers')
-    .config(routeConfig);
+    .config(routeConfig)
 
-  routeConfig.$inject = ['$stateProvider'];
+  routeConfig.$inject = ['$stateProvider']
 
-  function routeConfig($stateProvider) {
+  function routeConfig ($stateProvider) {
     $stateProvider
       .state('customers', {
         abstract: true,
@@ -23,6 +23,19 @@
           pageTitle: 'Customers List'
         }
       })
+      .state('customers.graph', {
+        url: '/:customerId',
+        templateUrl: 'modules/customers/client/views/graph-customers.client.view.html',
+        controller: 'CustomersGraphController',
+        controllerAs: 'vm',
+        resolve: {
+          customerResolve: getCustomer,
+          expensesResolve: getExpenses
+        },
+        data: {
+          pageTitle: 'Customer {{ articleResolve.name }}'
+        }
+      })
       .state('customers.view', {
         url: '/:customerId',
         templateUrl: 'modules/customers/client/views/view-customer.client.view.html',
@@ -31,23 +44,28 @@
         resolve: {
           customerResolve: getCustomer
         },
-        data:{
+        data: {
           pageTitle: 'Customer {{ articleResolve.name }}'
         }
-      });
+      })
   }
 
-  getCustomer.$inject = ['$stateParams', 'CustomersService'];
+  getExpenses.$inject = ['$stateParams', '$http']
 
-  function getCustomer($stateParams, CustomersService) {
+  function getCustomer ($stateParams, CustomersService) {
     return CustomersService.get({
       customerId: $stateParams.customerId
-    }).$promise;
+    }).$promise
   }
 
-  newCustomer.$inject = ['CustomersService'];
-
-  function newCustomer(CustomersService) {
-    return new CustomersService();
+  function getExpenses ($stateParams, $http) {
+    var customerId = $stateParams.customerId
+    return $http.get('/api/user-expenses/' +customerId);
   }
-})();
+
+  newCustomer.$inject = ['CustomersService']
+
+  function newCustomer (CustomersService) {
+    return new CustomersService()
+  }
+})()
