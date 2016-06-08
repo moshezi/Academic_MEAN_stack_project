@@ -41,6 +41,10 @@ _site/
 logs/
 build/
 
+# VSCode editor
+# =============
+.vscode/
+
 # Sublime editor
 # ==============
 .sublime-project
