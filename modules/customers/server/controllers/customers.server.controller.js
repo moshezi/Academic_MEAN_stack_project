@@ -14,12 +14,12 @@ var path = require('path'),
 /**
  * Show the current Customer
  */
-exports.read = function (req, res) {
-  // convert mongoose document to JSON
+exports.read = function(req, res) {
+    // convert mongoose document to JSON
   var customer = req.customer ? req.customer.toJSON() : {};
 
-  // Add a custom field to the Article, for determining if the current User is the "owner".
-  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
+    // Add a custom field to the Article, for determining if the current User is the "owner".
+    // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
   customer.isCurrentUserOwner = req.user && customer.user && customer.user._id.toString() === req.user._id.toString() ? true : false;
 
   res.jsonp(customer);
@@ -28,12 +28,12 @@ exports.read = function (req, res) {
 /**
  * Update a Customer
  */
-exports.update = function (req, res) {
+exports.update = function(req, res) {
   var customer = req.customer;
 
-  customer = _.extend(customer , req.body);
+  customer = _.extend(customer, req.body);
 
-  customer.save(function (err) {
+  customer.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -47,10 +47,10 @@ exports.update = function (req, res) {
 /**
  * Delete an Customer
  */
-exports.delete = function (req, res) {
+exports.delete = function(req, res) {
   var customer = req.customer;
 
-  customer.remove(function (err) {
+  customer.remove(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -64,13 +64,17 @@ exports.delete = function (req, res) {
 /**
  * List of Customers
  */
-exports.list = function (req, res) {
+exports.list = function(req, res) {
   if (!req.user) {
-    return res.status(400).send({ 'error': 'User is not authorized' });
+    return res.status(400).send({
+      'error': 'User is not authorized'
+    });
   }
 
-  User.find({ 'advisor': req.user.id }).sort().populate('advisor').exec(function (err, customers) {
-    // Customer.find().sort('-created').populate('user', 'displayName').exec(function(err, customers) {
+  User.find({
+    'advisor': req.user.id
+  }).sort().populate('advisor').exec(function(err, customers) {
+        // Customer.find().sort('-created').populate('user', 'displayName').exec(function(err, customers) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -84,14 +88,14 @@ exports.list = function (req, res) {
 /**
  * Customer middleware
  */
-exports.customerByID = function (req, res, next, id) {
+exports.customerByID = function(req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'Customer is invalid'
     });
   }
 
-  User.findById(id).populate('advisor', 'displayName').exec(function (err, customer) {
+  User.findById(id).populate('advisor', 'displayName').exec(function(err, customer) {
     if (err) {
       return next(err);
     } else if (!customer) {
