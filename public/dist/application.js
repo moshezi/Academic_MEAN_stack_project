@@ -1176,8 +1176,17 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   .controller('AdvisorsController', ['$scope', 'ExpensesService', 'Users', 'Authentication',
   function ($scope, ExpensesService, Users, Authentication) {
 
+    
     $scope.advisor = Authentication.user.advisor;
     $scope.users = Users.query();
+    var fixAdvisors = function () {
+      $scope.users.map(function(user) {
+        if (user._id === Authentication.user._id) {
+          $scope.advisor = Authentication.user.advisor;
+          return;
+        }
+      });
+    };
 
     $scope.chooseAdvisor = function(user) {
       var newUser = new Users(Authentication.user);
@@ -1188,15 +1197,6 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         $scope.advisor = Authentication.user.advisor;
         fixAdvisors();
       }, function (response) {
-      });
-    };
-
-    var fixAdvisors = function () {
-      $scope.users.map(function(user) {
-        if (user._id === Authentication.user._id) {
-          $scope.advisor = Authentication.user.advisor;
-          return;
-        }
       });
     };
 
@@ -1555,6 +1555,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
         return false;
       }
 
+      $scope.credentials.isAdvisor = true;
       $http.post('/api/auth/signup', $scope.credentials).success(function (response) {
         // If successful we assign the response to the global user model
         $scope.authentication.user = response;
