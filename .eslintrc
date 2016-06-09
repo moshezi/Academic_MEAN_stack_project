@@ -20,6 +20,7 @@
     moment: true,
     window: true,
     document: true,
+    moment: true,
     Modernizr: true,
     __TESTING__: true,
     beforeEach: true,

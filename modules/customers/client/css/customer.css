@@ -9,3 +9,11 @@
 .graphs-back:hover {
     cursor: pointer;
 }
+
+.expense-date {
+    color: #959595;
+}
+
+.expense-amount {
+    margin-top: 10px;
+}

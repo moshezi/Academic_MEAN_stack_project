@@ -27,7 +27,7 @@ var ExpenseSchema = new Schema({
   },
   expenseDate: {
     type: Number,
-    default: Date.now
+    default: new Date().getTime()
   },
   comments: {
     type: String,
@@ -35,7 +35,7 @@ var ExpenseSchema = new Schema({
   },
   category: {
     type: String,
-    default: '',
+    default: 'Default',
   },
   isRecurring: {
     type: Number,
