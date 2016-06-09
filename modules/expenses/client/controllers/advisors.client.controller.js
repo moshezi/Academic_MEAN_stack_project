@@ -6,6 +6,7 @@
   .controller('AdvisorsController', ['$scope', 'ExpensesService', 'Users', 'Authentication',
   function ($scope, ExpensesService, Users, Authentication) {
 
+    
     $scope.advisor = Authentication.user.advisor;
     $scope.users = Users.query();
     var fixAdvisors = function () {
