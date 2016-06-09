@@ -1,12 +1,12 @@
 <section class="container">
     <div class="page-header">
-        <h1>Customers</h1>
+        <h1>Customers:</h1>
     </div>
     <!-- data-ui-sref="customers.view({ customerId: customer._id })" -->
     <div class="row">
         <div ng-show="vm.customers && vm.customers.length > 0">
             <div class="list-group col-sm-3 ">
-                <h3 class="text-center">Customers:</h3>
+            
 
                 <div data-ng-repeat="customer in vm.customers" class="list-group-item">
                     <div ng-click="vm.getExpensesForCustomer(customer._id)" class="customer-row">
@@ -18,7 +18,7 @@
                           <a ui-sref="customers.graph({customerId: customer._id})" ng-click="$event.stopPropagation()">Graphs</a>
                         </div>
                         <h4 class="list-group-item-heading" data-ng-bind="customer.name"></h4>
-                        
+
                     </div>
                 </div>
             </div>
