@@ -1416,6 +1416,10 @@ angular.module('users').config(['$stateProvider',
         url: '/picture',
         templateUrl: 'modules/users/client/views/settings/change-profile-picture.client.view.html'
       })
+      .state('settings.description', {
+        url: '/description',
+        templateUrl: 'modules/users/client/views/settings/edit-description.client.view.html'
+      })
       .state('authentication', {
         abstract: true,
         url: '/authentication',
@@ -1758,6 +1762,36 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
     $scope.cancelUpload = function () {
       $scope.uploader.clearQueue();
       $scope.imageURL = $scope.user.profileImageURL;
+    };
+  }
+]);
+
+'use strict';
+
+angular.module('users').controller('EditDescriptionController', ['$scope', '$http', '$location', 'Users', 'Authentication',
+  function ($scope, $http, $location, Users, Authentication) {
+    $scope.user = Authentication.user;
+
+    // Update a user profile
+    $scope.updateUserProfile = function (isValid) {
+      $scope.success = $scope.error = null;
+
+      // if (!isValid) {
+      //   $scope.$broadcast('show-errors-check-validity', 'userForm');
+
+      //   return false;
+      // }
+
+      var user = new Users($scope.user);
+
+      user.$update(function (response) {
+        $scope.$broadcast('show-errors-reset', 'userForm');
+
+        $scope.success = true;
+        Authentication.user = response;
+      }, function (response) {
+        $scope.error = response.data.message;
+      });
     };
   }
 ]);
