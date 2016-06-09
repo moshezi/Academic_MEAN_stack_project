@@ -11,7 +11,7 @@
   function ExpensesController ($scope, $state, Authentication, expense) {
     var vm = this;
 
-    var moment = moment;
+    var moment = window.moment;
     vm.authentication = Authentication;
     vm.expense = expense;
     vm.error = null;
@@ -30,7 +30,7 @@
     function save(isValid) {
       if (vm.tempExpenseDate) {
         try {
-          var date = moment(vm.tempExpenseDate, 'DD/MM/yyyy');
+          var date = moment(vm.tempExpenseDate, 'DD/MM/YYYY');
           vm.expense.expenseDate = date.toDate().getTime();
         } catch (err) {
 

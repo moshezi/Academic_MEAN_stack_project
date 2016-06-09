@@ -13,26 +13,47 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">By category</div>
                     <div class="panel-body">
-                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="dataPie" chart-labels="labelsPie"></canvas>
+                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="thisMonthDataPie" chart-labels="thisMonthLabelsPie"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-lg-8 col-sm-12" id="pie-chart">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Weekly expenses</div>
+                    <div class="panel-heading">Weekly expenses (All categories)</div>
                     <div class="panel-body">
-                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="dataBar" chart-labels="labelsBar" chart-series="seriesBar"></canvas>
+                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="thisMonthDataBar" chart-labels="monthLabelsBar" chart-series="monthSeriesBar"></canvas>
                     </div>
                 </div>
             </div>
             
         </div>
         <div class="row">
+            <h3>Last month</h3>
+            <div class="col-lg-4 col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">By category</div>
+                    <div class="panel-body">
+                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="lastMonthDataPie" chart-labels="lastMonthLabelsPie"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-sm-12" id="pie-chart">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Weekly expenses (All categories)</div>
+                    <div class="panel-body">
+                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="lastMonthDataBar" chart-labels="monthLabelsBar" chart-series="monthSeriesBar"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <h3>This year</h3>
             <div class="col-sm-12" id="pie-chart">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Monthly expenses (All categories)</div>
+                    <div class="panel-heading">Yearly expenses (All categories)</div>
                     <div class="panel-body">
-                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="dataPie" chart-labels="labelsPie"></canvas>
+                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="thisYearDataBar" chart-labels="thisYearLabelsBar" chart-series="thisYearSeriesBar"></canvas>
                     </div>
                 </div>
             </div>
