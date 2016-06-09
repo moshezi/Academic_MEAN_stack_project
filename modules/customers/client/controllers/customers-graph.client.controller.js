@@ -72,6 +72,49 @@
           });
         };
 
+        $scope.handleThisMonthPieClick = function ($event) {
+          var customerId = customerResolve._id;
+          var category = $event[0].label;
+          var month = new Date().getMonth();
+          window.location = '/customers/customers-month-category' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + category;
+        };
+
+        $scope.handleThisMonthBarClick = function ($event) {
+          var customerId = customerResolve._id;
+          var week = $event[0].label.slice(-1);
+          var month = new Date().getMonth();
+
+          window.location = '/customers/customers-month-week' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + week;
+        };
+
+        $scope.handleLastMonthPieClick = function ($event) {
+          var customerId = customerResolve._id;
+          var category = $event[0].label;
+          var month = new Date().getMonth() - 1;
+
+          window.location = '/customers/customers-month-category' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + category;
+        };
+
+        $scope.handleLastMonthBarClick = function ($event) {
+          var customerId = customerResolve._id;
+          var week = $event[0].label.slice(-1);
+          var month = new Date().getMonth() - 1;
+
+          window.location = '/customers/customers-month-week' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + week;
+        };
+
         var aggregateThisMonthBarData = function(expenses) {
           expenses.map(function(expense) {
             var expenseDate = new Date(expense.expenseDate);

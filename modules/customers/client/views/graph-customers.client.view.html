@@ -13,7 +13,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">By category</div>
                     <div class="panel-body">
-                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="thisMonthDataPie" chart-labels="thisMonthLabelsPie"></canvas>
+                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="thisMonthDataPie" chart-labels="thisMonthLabelsPie" click="handleThisMonthPieClick"></canvas>
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Weekly expenses (All categories)</div>
                     <div class="panel-body">
-                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="thisMonthDataBar" chart-labels="monthLabelsBar" chart-series="monthSeriesBar"></canvas>
+                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="thisMonthDataBar" chart-labels="monthLabelsBar" chart-series="monthSeriesBar" click="handleThisMonthBarClick"></canvas>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">By category</div>
                     <div class="panel-body">
-                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="lastMonthDataPie" chart-labels="lastMonthLabelsPie"></canvas>
+                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="lastMonthDataPie" chart-labels="lastMonthLabelsPie" click="handleLastMonthPieClick"></canvas>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Weekly expenses (All categories)</div>
                     <div class="panel-body">
-                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="lastMonthDataBar" chart-labels="monthLabelsBar" chart-series="monthSeriesBar"></canvas>
+                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="lastMonthDataBar" chart-labels="monthLabelsBar" chart-series="monthSeriesBar" click="handleLastMonthBarClick"></canvas>
                     </div>
                 </div>
             </div>

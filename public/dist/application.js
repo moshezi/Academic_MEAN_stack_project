@@ -860,6 +860,32 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
           pageTitle: 'Customers List'
         }
       })
+      .state('customers.month-category', {
+        url: '/customers-month-category/:customerId/:month/:category',
+        templateUrl: 'modules/customers/client/views/customer-month-category.client.view.html',
+        controller: 'CustomersMonthCategoryController',
+        controllerAs: 'vm',
+        resolve: {
+          customerResolve: getCustomer,
+          expensesResolve: getCustomerMonthCategoryExpenses
+        },
+        data: {
+          pageTitle: 'Customer {{ articleResolve.name }}'
+        }
+      })
+      .state('customers.month-week', {
+        url: '/customers-month-week/:customerId/:month/:week',
+        templateUrl: 'modules/customers/client/views/customer-month-week.client.view.html',
+        controller: 'CustomersMonthWeekController',
+        controllerAs: 'vm',
+        resolve: {
+          customerResolve: getCustomer,
+          expensesResolve: getCustomerMonthWeekExpenses
+        },
+        data: {
+          pageTitle: 'Customer {{ articleResolve.name }}'
+        }
+      })
       .state('customers.graph', {
         url: '/:customerId',
         templateUrl: 'modules/customers/client/views/graph-customers.client.view.html',
@@ -888,11 +914,29 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   }
 
   getExpenses.$inject = ['$stateParams', '$http'];
+  getCustomerMonthCategoryExpenses.$inject = ['$stateParams', '$http'];
+  getCustomerMonthWeekExpenses.$inject = ['$stateParams', '$http'];
 
   function getCustomer ($stateParams, CustomersService) {
     return CustomersService.get({
       customerId: $stateParams.customerId
     }).$promise;
+  }
+
+  function getCustomerMonthCategoryExpenses ($stateParams, $http) {
+    var category = $stateParams.category;
+    var month = $stateParams.month;
+    var customerId = $stateParams.customerId;
+    
+    return $http.get('api/customer-month-category-expenses/' + customerId + '/' + month + '/' + category);
+  }
+
+  function getCustomerMonthWeekExpenses ($stateParams, $http) {
+    var week = $stateParams.week;
+    var month = $stateParams.month;
+    var customerId = $stateParams.customerId;
+    
+    return $http.get('api/customer-month-week-expenses/' + customerId + '/' + month + '/' + week);
   }
 
   function getExpenses ($stateParams, $http) {
@@ -981,6 +1025,49 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
           });
         };
 
+        $scope.handleThisMonthPieClick = function ($event) {
+          var customerId = customerResolve._id;
+          var category = $event[0].label;
+          var month = new Date().getMonth();
+          window.location = '/customers/customers-month-category' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + category;
+        };
+
+        $scope.handleThisMonthBarClick = function ($event) {
+          var customerId = customerResolve._id;
+          var week = $event[0].label.slice(-1);
+          var month = new Date().getMonth();
+
+          window.location = '/customers/customers-month-week' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + week;
+        };
+
+        $scope.handleLastMonthPieClick = function ($event) {
+          var customerId = customerResolve._id;
+          var category = $event[0].label;
+          var month = new Date().getMonth() - 1;
+
+          window.location = '/customers/customers-month-category' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + category;
+        };
+
+        $scope.handleLastMonthBarClick = function ($event) {
+          var customerId = customerResolve._id;
+          var week = $event[0].label.slice(-1);
+          var month = new Date().getMonth() - 1;
+
+          window.location = '/customers/customers-month-week' +
+                            '/' + customerId +
+                            '/' + month + 
+                            '/' + week;
+        };
+
         var aggregateThisMonthBarData = function(expenses) {
           expenses.map(function(expense) {
             var expenseDate = new Date(expense.expenseDate);
@@ -1057,6 +1144,39 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         vm.customer = customerResolve;
 
         vm.getExpensesForCustomer = expensesResolve.data;
+      }]);
+})();
+(function() {
+  'use strict';
+
+  angular
+    .module('customers')
+    .controller('CustomersMonthCategoryController',
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+        $scope.expenses = expensesResolve.data;
+        $scope.customer = customerResolve;
+
+        $scope.$back = function () {
+          window.history.back();
+        };
+      }]);
+})();
+(function() {
+  'use strict';
+
+  angular
+    .module('customers')
+    .controller('CustomersMonthWeekController',
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+        $scope.expenses = expensesResolve.data;
+        $scope.customer = customerResolve;
+
+        $scope.$back = function () {
+          window.history.back();
+        };
+
       }]);
 })();
 (function () {

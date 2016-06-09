@@ -16,6 +16,12 @@ module.exports = function(app) {
     .put(customers.update)
     .delete(customers.delete);
 
+  app.route('/api/customer-month-category-expenses/:customerId/:month/:category')
+    .get(customers.customerMonthCategoryExpenses);
+  
+  app.route('/api/customer-month-week-expenses/:customerId/:month/:week')
+    .get(customers.customerMonthWeekExpenses);
+
   // Finish by binding the Customer middleware
   app.param('customerId', customers.customerByID);
 };

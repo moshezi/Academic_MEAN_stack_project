@@ -7,6 +7,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Customer = mongoose.model('Customer'),
   User = mongoose.model('User'),
+  Expense = mongoose.model('Expense'),
   ObjectId = require('mongoose').Types.ObjectId,
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
@@ -83,6 +84,74 @@ exports.list = function(req, res) {
       res.jsonp(customers);
     }
   });
+};
+
+var filterExpensesByMonthAndCategory = function (expenses, month, category) {
+  var monthCategoryExpenses = expenses.filter(function(expense) {
+    var date = new Date(expense.expenseDate);  
+    if (date.getMonth() === month && expense.category === category) {
+      return expense;
+    }
+  });
+  return monthCategoryExpenses;
+};
+
+var filterExpensesByMonthAndWeek = function (expenses, month, week) {
+  var monthWeekExpenses = expenses.filter(function(expense) {
+    var date = new Date(expense.expenseDate);
+    var expenseWeek = 0 | date.getDate() / 7;
+    expenseWeek = (expenseWeek > 3) ? 3 : expenseWeek;  
+    if (date.getMonth() === month && expenseWeek === week) {
+      return expense;
+    }
+  });
+  return monthWeekExpenses;
+};
+
+exports.customerMonthWeekExpenses = function(req, res) {
+  var customerId = req.params.customerId;
+  var month = req.params.month;
+  var week = req.params.week;
+  
+  Expense.find({
+    'user': customerId
+  }).sort().populate('user').exec(function(err, expenses) {
+        // Customer.find().sort('-created').populate('user', 'displayName').exec(function(err, customers) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      var monthWeekExpenses = filterExpensesByMonthAndWeek(expenses, +month, (+week) - 1);
+      
+      res.jsonp(monthWeekExpenses);
+    }
+  });
+};
+
+exports.customerMonthCategoryExpenses = function(req, res) {
+  var customerId = req.params.customerId;
+  var month = req.params.month;
+  var category = req.params.category;
+  
+  Expense.find({
+    'user': customerId
+  }).sort().populate('user').exec(function(err, expenses) {
+        // Customer.find().sort('-created').populate('user', 'displayName').exec(function(err, customers) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      var monthCategoryExpenses = filterExpensesByMonthAndCategory(expenses, +month, category);
+      
+      res.jsonp(monthCategoryExpenses);
+    }
+  });
+
+  // res.jsonp(req.customer);
+
+  // res.status(200).send(customerId + ' ' + month + ' ' + category);
 };
 
 /**
