@@ -8,46 +8,31 @@
     <div ng-show="vm.getExpensesForCustomer && vm.getExpensesForCustomer.length > 0">
 
         <div class="row">
-            <div class="col-lg-3 col-sm-12" id="pie-chart">
+            <h3>This month</h3>
+            <div class="col-lg-4 col-sm-12" id="pie-chart">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Weekly expenses (Category 1)</div>
+                    <div class="panel-heading">By category</div>
                     <div class="panel-body">
-                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                        <canvas id="pie" height="175" class="chart chart-pie chart-xs" chart-data="dataPie" chart-labels="labelsPie"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-12" id="pie-chart">
+            <div class="col-lg-8 col-sm-12" id="pie-chart">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Weekly expenses (Category 2)</div>
+                    <div class="panel-heading">Weekly expenses</div>
                     <div class="panel-body">
-                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                        <canvas height="80" id="bar" class="chart chart-bar" chart-data="dataBar" chart-labels="labelsBar" chart-series="seriesBar"></canvas>
                     </div>
                 </div>
             </div>
             
-            <div class="col-lg-3 col-sm-12" id="pie-chart">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Weekly expenses (Category 3)</div>
-                    <div class="panel-body">
-                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-12" id="pie-chart">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Weekly expenses (Category 4)</div>
-                    <div class="panel-body">
-                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-sm-12" id="pie-chart">
                 <div class="panel panel-default">
                     <div class="panel-heading">Monthly expenses (All categories)</div>
                     <div class="panel-body">
-                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="data" chart-labels="labels"></canvas>
+                        <canvas id="pie" class="chart chart-pie chart-xs" chart-data="dataPie" chart-labels="labelsPie"></canvas>
                     </div>
                 </div>
             </div>

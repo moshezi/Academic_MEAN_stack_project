@@ -11,6 +11,7 @@
   function ExpensesController ($scope, $state, Authentication, expense) {
     var vm = this;
 
+    var moment = moment;
     vm.authentication = Authentication;
     vm.expense = expense;
     vm.error = null;
@@ -27,6 +28,14 @@
 
     // Save Expense
     function save(isValid) {
+      if (vm.tempExpenseDate) {
+        try {
+          var date = moment(vm.tempExpenseDate, 'DD/MM/yyyy');
+          vm.expense.expenseDate = date.toDate().getTime();
+        } catch (err) {
+
+        }
+      }
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.form.expenseForm');
         return false;

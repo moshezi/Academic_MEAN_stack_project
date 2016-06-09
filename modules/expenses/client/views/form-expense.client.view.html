@@ -27,6 +27,14 @@
           <label class="control-label" for="name">Months recurring</label>
           <input name="isRecurring" type="text" ng-model="vm.expense.isRecurring" id="isRecurring" class="form-control" placeholder="How many months is the expense recurring? (leave blank if just this month)">
         </div>
+        <div class="form-group">
+          <label class="control-label" for="name">Expense Date</label>
+          <input name="tempExpenseDate" type="text" ng-model="vm.tempExpenseDate" id="tempExpenseDate" class="form-control" placeholder="dd/MM/yyyy">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="name">Category</label>
+          <input name="category" type="text" ng-model="vm.expense.category" id="category" class="form-control" placeholder="Default category" ng-init="vm.expense.category='Default'">
+        </div>
         <div class="form-group" show-errors>
           <label class="control-label" for="name">Comments</label>
           <input name="comments" type="text" ng-model="vm.expense.comments" id="comments" class="form-control" placeholder="Comments">

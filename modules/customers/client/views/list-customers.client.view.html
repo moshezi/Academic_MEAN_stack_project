@@ -14,11 +14,11 @@
         <span data-ng-if="customer.displayName" data-ng-bind="customer.displayName"></span>
         <span data-ng-if="!customer.displayName">Deleted User</span>
       </small>
-      <div class="pull-right">
-                          <a ui-sref="customers.graph({customerId: customer._id})" ng-click="$event.stopPropagation()">Graphs</a>
+                        <div class="pull-right">
+                            <a ui-sref="customers.graph({customerId: customer._id})" ng-click="$event.stopPropagation()">Graphs</a>
                         </div>
                         <h4 class="list-group-item-heading" data-ng-bind="customer.name"></h4>
-                        
+
                     </div>
                 </div>
             </div>
@@ -32,14 +32,15 @@
                 <div ng-show="vm.currentCustomerExpenses && vm.currentCustomerExpenses.length">
 
 
-                    <a data-ng-repeat="expense in vm.currentCustomerExpenses" data-ui-sref="expenses.view({ expenseId: expense._id })" class="list-group-item">
+                    <a data-ng-repeat="expense in vm.currentCustomerExpenses | orderBy: '-expenseDate'" data-ui-sref="expenses.view({ expenseId: expense._id })" class="list-group-item">
                         <!--data-ng-if="vm.currentCustomer._id==expense.user._id"-->
                         <small class="list-group-item-text">
       <span data-ng-if="expense.user" data-ng-bind="expense.user.displayName"></span>
       <span data-ng-if="!expense.user">Deleted User</span>
+      <span class="expense-date" data-ng-if="expense.user" data-ng-bind="expense.expenseDate | date"></span> - <span data-ng-bind="expense.name"></span>
     </small>
-                        <h3 class="list-group-item-heading" data-ng-bind="expense.name"></h3>
-                        <h4 class="list-group-item-heading" data-ng-bind="expense.amount"></h4>
+    <br>
+                        <h3 class="list-group-item-heading expense-amount" data-ng-bind="expense.amount | currency:'₪ ':2"></h3>
 
                     </a>
                 </div>
