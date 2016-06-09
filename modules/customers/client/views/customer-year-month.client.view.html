@@ -1,0 +1,33 @@
+<section class="container">
+    <h3>Customer expenses by year and month</h3>
+
+    <div class="expense-amount list-group">
+        <h3>{{customer.firstName + ' ' + customer.lastName}}</h3>
+
+        <div ng-hide="expenses && expenses.length">
+            <br>
+            <h4 class="text-center">No expenses for current customer</h4>
+        </div>
+        <div ng-show="expenses && expenses.length">
+
+
+            <a data-ng-repeat="expense in expenses | orderBy: '-expenseDate'" data-ui-sref="expenses.view({ expenseId: expense._id })" class="list-group-item">
+                <!--data-ng-if="vm.currentCustomer._id==expense.user._id"-->
+                <small class="list-group-item-text">
+      <span data-ng-if="expense.user" data-ng-bind="expense.user.displayName"></span>
+      <span data-ng-if="!expense.user">Deleted User</span>
+      <span class="expense-date" data-ng-if="expense.user" data-ng-bind="expense.expenseDate | date"></span> - <span data-ng-bind="expense.name"></span>
+    </small>
+                <br>
+                <h3 class="list-group-item-heading expense-amount" data-ng-bind="expense.amount | currency:'₪ ':2"></h3>
+
+            </a>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+    <br>
+    <a class="graphs-back" ng-click="$back()">Back</a>
+</section>

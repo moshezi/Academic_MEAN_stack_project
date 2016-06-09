@@ -36,6 +36,19 @@
           pageTitle: 'Customer {{ articleResolve.name }}'
         }
       })
+      .state('customers.year-month', {
+        url: '/customers-year-month/:customerId/:year/:month',
+        templateUrl: 'modules/customers/client/views/customer-year-month.client.view.html',
+        controller: 'CustomersYearMonthController',
+        controllerAs: 'vm',
+        resolve: {
+          customerResolve: getCustomer,
+          expensesResolve: getCustomerYearMonthExpenses
+        },
+        data: {
+          pageTitle: 'Customer {{ articleResolve.name }}'
+        }
+      })
       .state('customers.month-week', {
         url: '/customers-month-week/:customerId/:month/:week',
         templateUrl: 'modules/customers/client/views/customer-month-week.client.view.html',
@@ -94,17 +107,25 @@
     return $http.get('api/customer-month-category-expenses/' + customerId + '/' + month + '/' + category);
   }
 
+  function getCustomerYearMonthExpenses ($stateParams, $http) {
+    var year = $stateParams.year;
+    var month = $stateParams.month;
+    var customerId = $stateParams.customerId;
+    
+    return $http.get('api/customer-year-month-expenses/' + customerId + '/' + year + '/' + month);
+  }
+
+  function getExpenses ($stateParams, $http) {
+    var customerId = $stateParams.customerId;
+    return $http.get('/api/user-expenses/' +customerId);
+  }
+
   function getCustomerMonthWeekExpenses ($stateParams, $http) {
     var week = $stateParams.week;
     var month = $stateParams.month;
     var customerId = $stateParams.customerId;
     
     return $http.get('api/customer-month-week-expenses/' + customerId + '/' + month + '/' + week);
-  }
-
-  function getExpenses ($stateParams, $http) {
-    var customerId = $stateParams.customerId;
-    return $http.get('/api/user-expenses/' +customerId);
   }
 
   newCustomer.$inject = ['CustomersService'];

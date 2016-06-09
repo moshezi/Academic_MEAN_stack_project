@@ -22,6 +22,9 @@ module.exports = function(app) {
   app.route('/api/customer-month-week-expenses/:customerId/:month/:week')
     .get(customers.customerMonthWeekExpenses);
 
+  app.route('/api/customer-year-month-expenses/:customerId/:year/:month')
+    .get(customers.customerYearMonthExpenses);
+
   // Finish by binding the Customer middleware
   app.param('customerId', customers.customerByID);
 };

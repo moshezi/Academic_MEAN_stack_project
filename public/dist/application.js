@@ -838,6 +838,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   'use strict';
 
   getCustomer.$inject = ["$stateParams", "CustomersService"];
+  getCustomerYearMonthExpenses.$inject = ["$stateParams", "$http"];
   angular
     .module('customers')
     .config(routeConfig);
@@ -868,6 +869,19 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
         resolve: {
           customerResolve: getCustomer,
           expensesResolve: getCustomerMonthCategoryExpenses
+        },
+        data: {
+          pageTitle: 'Customer {{ articleResolve.name }}'
+        }
+      })
+      .state('customers.year-month', {
+        url: '/customers-year-month/:customerId/:year/:month',
+        templateUrl: 'modules/customers/client/views/customer-year-month.client.view.html',
+        controller: 'CustomersYearMonthController',
+        controllerAs: 'vm',
+        resolve: {
+          customerResolve: getCustomer,
+          expensesResolve: getCustomerYearMonthExpenses
         },
         data: {
           pageTitle: 'Customer {{ articleResolve.name }}'
@@ -931,17 +945,25 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     return $http.get('api/customer-month-category-expenses/' + customerId + '/' + month + '/' + category);
   }
 
+  function getCustomerYearMonthExpenses ($stateParams, $http) {
+    var year = $stateParams.year;
+    var month = $stateParams.month;
+    var customerId = $stateParams.customerId;
+    
+    return $http.get('api/customer-year-month-expenses/' + customerId + '/' + year + '/' + month);
+  }
+
+  function getExpenses ($stateParams, $http) {
+    var customerId = $stateParams.customerId;
+    return $http.get('/api/user-expenses/' +customerId);
+  }
+
   function getCustomerMonthWeekExpenses ($stateParams, $http) {
     var week = $stateParams.week;
     var month = $stateParams.month;
     var customerId = $stateParams.customerId;
     
     return $http.get('api/customer-month-week-expenses/' + customerId + '/' + month + '/' + week);
-  }
-
-  function getExpenses ($stateParams, $http) {
-    var customerId = $stateParams.customerId;
-    return $http.get('/api/user-expenses/' +customerId);
   }
 
   newCustomer.$inject = ['CustomersService'];
@@ -1068,6 +1090,17 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
                             '/' + week;
         };
 
+        $scope.handleThisYearBarClick = function ($event) {
+          var customerId = customerResolve._id;
+          var month = $scope.thisYearLabelsBar.indexOf($event[0].label) + 1;
+          var year = new Date().getFullYear();
+
+          window.location = '/customers/customers-year-month' +
+                            '/' + customerId +
+                            '/' + year + 
+                            '/' + month;
+        };
+
         var aggregateThisMonthBarData = function(expenses) {
           expenses.map(function(expense) {
             var expenseDate = new Date(expense.expenseDate);
@@ -1168,6 +1201,23 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   angular
     .module('customers')
     .controller('CustomersMonthWeekController',
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+        $scope.expenses = expensesResolve.data;
+        $scope.customer = customerResolve;
+
+        $scope.$back = function () {
+          window.history.back();
+        };
+
+      }]);
+})();
+(function() {
+  'use strict';
+
+  angular
+    .module('customers')
+    .controller('CustomersYearMonthController',
     ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
       function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
         $scope.expenses = expensesResolve.data;

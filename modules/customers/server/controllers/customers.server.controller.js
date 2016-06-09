@@ -96,6 +96,16 @@ var filterExpensesByMonthAndCategory = function (expenses, month, category) {
   return monthCategoryExpenses;
 };
 
+var filterExpensesByYearAndMonth = function (expenses, year, month) {
+  var yearMonthExpenses = expenses.filter(function(expense) {
+    var date = new Date(expense.expenseDate);  
+    if (date.getFullYear() === year && date.getMonth() === month) {
+      return expense;
+    }
+  });
+  return yearMonthExpenses;
+};
+
 var filterExpensesByMonthAndWeek = function (expenses, month, week) {
   var monthWeekExpenses = expenses.filter(function(expense) {
     var date = new Date(expense.expenseDate);
@@ -128,6 +138,26 @@ exports.customerMonthWeekExpenses = function(req, res) {
     }
   });
 };
+exports.customerYearMonthExpenses = function(req, res) {
+  var customerId = req.params.customerId;
+  var month = req.params.month;
+  var year = req.params.year;
+  
+  Expense.find({
+    'user': customerId
+  }).sort().populate('user').exec(function(err, expenses) {
+        // Customer.find().sort('-created').populate('user', 'displayName').exec(function(err, customers) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      var yearMonthExpenses = filterExpensesByYearAndMonth(expenses, +year, (+month) - 1);
+      
+      res.jsonp(yearMonthExpenses);
+    }
+  });
+};
 
 exports.customerMonthCategoryExpenses = function(req, res) {
   var customerId = req.params.customerId;
@@ -148,6 +178,7 @@ exports.customerMonthCategoryExpenses = function(req, res) {
       res.jsonp(monthCategoryExpenses);
     }
   });
+  
 
   // res.jsonp(req.customer);
 

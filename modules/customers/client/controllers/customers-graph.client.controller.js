@@ -115,6 +115,17 @@
                             '/' + week;
         };
 
+        $scope.handleThisYearBarClick = function ($event) {
+          var customerId = customerResolve._id;
+          var month = $scope.thisYearLabelsBar.indexOf($event[0].label) + 1;
+          var year = new Date().getFullYear();
+
+          window.location = '/customers/customers-year-month' +
+                            '/' + customerId +
+                            '/' + year + 
+                            '/' + month;
+        };
+
         var aggregateThisMonthBarData = function(expenses) {
           expenses.map(function(expense) {
             var expenseDate = new Date(expense.expenseDate);
