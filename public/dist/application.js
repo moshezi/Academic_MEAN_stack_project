@@ -1185,10 +1185,17 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   angular
     .module('customers')
     .controller('CustomersMonthCategoryController',
-    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
-      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve', '$state',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve, $state) {
         $scope.expenses = expensesResolve.data;
         $scope.customer = customerResolve;
+
+        $scope.months = ['January', 'February', 'March', 'April', 'May',
+                                       'June', 'July', 'August', 'September', 'October',
+                                      'November', 'December'];
+
+        $scope.category = $state.params.category;
+        $scope.month = $state.params.month;
 
         $scope.$back = function () {
           window.history.back();
@@ -1201,10 +1208,19 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   angular
     .module('customers')
     .controller('CustomersMonthWeekController',
-    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
-      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve', '$state',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve, $state) {
         $scope.expenses = expensesResolve.data;
         $scope.customer = customerResolve;
+
+        $scope.months = ['January', 'February', 'March', 'April', 'May',
+                                       'June', 'July', 'August', 'September', 'October',
+                                      'November', 'December'];
+
+        $scope.weeks = ['1st', '2nd', '3rd', '4th'];
+
+        $scope.week = $state.params.week;
+        $scope.month = $state.params.month;
 
         $scope.$back = function () {
           window.history.back();
@@ -1218,10 +1234,17 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
   angular
     .module('customers')
     .controller('CustomersYearMonthController',
-    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
-      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
+    ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve', '$state',
+      function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve, $state) {
         $scope.expenses = expensesResolve.data;
         $scope.customer = customerResolve;
+
+        $scope.months = ['January', 'February', 'March', 'April', 'May',
+                                       'June', 'July', 'August', 'September', 'October',
+                                      'November', 'December'];
+
+        $scope.year = $state.params.year;  
+        $scope.month = $state.params.month;
 
         $scope.$back = function () {
           window.history.back();
