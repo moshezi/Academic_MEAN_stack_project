@@ -1051,6 +1051,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
           aggregatethisYearBarData(thisYearExpenses);
 
           refreshData();
+          window.dispatchEvent(new Event('resize'));
         });
 
         vm.customer = customerResolve;

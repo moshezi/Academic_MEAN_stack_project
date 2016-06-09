@@ -142,6 +142,7 @@
           aggregatethisYearBarData(thisYearExpenses);
 
           refreshData();
+          window.dispatchEvent(new Event('resize'));
         });
 
         vm.customer = customerResolve;
