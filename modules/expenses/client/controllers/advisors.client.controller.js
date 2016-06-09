@@ -8,6 +8,14 @@
 
     $scope.advisor = Authentication.user.advisor;
     $scope.users = Users.query();
+    var fixAdvisors = function () {
+      $scope.users.map(function(user) {
+        if (user._id === Authentication.user._id) {
+          $scope.advisor = Authentication.user.advisor;
+          return;
+        }
+      });
+    };
 
     $scope.chooseAdvisor = function(user) {
       var newUser = new Users(Authentication.user);
@@ -18,15 +26,6 @@
         $scope.advisor = Authentication.user.advisor;
         fixAdvisors();
       }, function (response) {
-      });
-    };
-
-    var fixAdvisors = function () {
-      $scope.users.map(function(user) {
-        if (user._id === Authentication.user._id) {
-          $scope.advisor = Authentication.user.advisor;
-          return;
-        }
       });
     };
 

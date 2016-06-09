@@ -4,9 +4,9 @@
     <form name="userForm" ng-submit="signup(userForm.$valid)" class="signin" novalidate autocomplete="off">
       <fieldset>
         <br>
-        <div class="form-group">
+        <div class="form-group" hidden>
             <label for="isAdvisor">I am an advisor</label>
-            <input type="checkbox" id="isAdvisor" name="isAdvisor" class="" ng-model="credentials.isAdvisor" placeholder="Is advisor">
+            <input type="checkbox" id="isAdvisor" name="isAdvisor" class="" ng-model="credentials.isAdvisor"placeholder="Is advisor">
         </div>
         <div class="form-group" show-errors>
           <label for="firstName">First Name</label>
