@@ -23,7 +23,7 @@ function ($scope, $location, Authentication, Socket, $http) {
     $scope.chosenCustomer = customer;
     $scope.messages = [];
     getAllMessages();
-  }
+  };
 
   function getAllCustomers() {
     $http.get('/api/customers')
@@ -32,7 +32,7 @@ function ($scope, $location, Authentication, Socket, $http) {
     })
     .error(function (data, status, headers, config) {
       
-    })
+    });
   }
   if ($scope.isAdvisor) {
     getAllCustomers();
@@ -87,7 +87,7 @@ function ($scope, $location, Authentication, Socket, $http) {
       var receiverId = ($scope.isAdvisor ? $scope.chosenCustomer._id : $scope.user.advisor._id);
 
       return ((message.sender._id === myId && message.to._id === receiverId) ||
-          (message.sender._id === receiverId && message.to._id === myId))
+          (message.sender._id === receiverId && message.to._id === myId));
     }
   }
 

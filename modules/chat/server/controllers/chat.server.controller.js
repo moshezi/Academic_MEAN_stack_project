@@ -23,13 +23,13 @@ module.exports = {
       } else {
         res.status(400).send({ error: 'User is neither a customer nor an advisor' });
       }
-    }
-
-    Chatmessage.find({ $or:[ { user: user.id }, {} ] })
+      Chatmessage.find({ $or:[ { user: user.id }, {} ] })
         .populate('sender').populate('to')
     // .where({ createdAt: { $gte: lastTenMinutes } })
       .exec(function(err, data) {
         res.json(data);
       });
+    }
+    
   }
 };
