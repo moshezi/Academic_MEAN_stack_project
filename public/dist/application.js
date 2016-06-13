@@ -1053,6 +1053,7 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
     ['$scope', 'CustomersService', 'ExpensesService', '$http', '$timeout', 'customerResolve', 'expensesResolve',
       function ($scope, CustomersService, ExpensesService, $http, $timeout, customerResolve, expensesResolve) {
         var vm = this;
+        vm.expenses = expensesResolve.data;
 
         // this month        
         $scope.thisMonthCategories = [];
@@ -1215,39 +1216,39 @@ angular.module('core').service('Socket', ['Authentication', '$state', '$timeout'
           });
         };
 
-        ExpensesService.query(function (results) {
-          vm.expenses = results;
-
-          var now = new Date();
-
-          var thisMonthExpenses = vm.expenses.filter(function(expense) {
-            if (new Date(expense.expenseDate).getMonth() === now.getMonth())
-              return expense;
-          });
-
-          var lastMonthExpenses = vm.expenses.filter(function(expense) {
-            if (new Date(expense.expenseDate).getMonth() === now.getMonth() - 1)
-              return expense;
-          });
-          var thisYearExpenses = vm.expenses.filter(function(expense) {
-            if (new Date(expense.expenseDate).getYear() === now.getYear())
-              return expense;
-          });
-
-          aggregateThisMonthPieData(thisMonthExpenses);
-          aggregateThisMonthBarData(thisMonthExpenses);
-
-          aggregateLastMonthPieData(lastMonthExpenses);
-          aggregateLastMonthBarData(lastMonthExpenses);
-          aggregatethisYearBarData(thisYearExpenses);
-
-          refreshData();
-          window.dispatchEvent(new Event('resize'));
-        });
 
         vm.customer = customerResolve;
-
         vm.getExpensesForCustomer = expensesResolve.data;
+        // ExpensesService.query(function (results) {
+        //   vm.expenses = results;
+
+        var now = new Date();
+
+        var thisMonthExpenses = vm.expenses.filter(function(expense) {
+          if (new Date(expense.expenseDate).getMonth() === now.getMonth())
+            return expense;
+        });
+
+        var lastMonthExpenses = vm.expenses.filter(function(expense) {
+          if (new Date(expense.expenseDate).getMonth() === now.getMonth() - 1)
+            return expense;
+        });
+        var thisYearExpenses = vm.expenses.filter(function(expense) {
+          if (new Date(expense.expenseDate).getYear() === now.getYear())
+            return expense;
+        });
+
+        aggregateThisMonthPieData(thisMonthExpenses);
+        aggregateThisMonthBarData(thisMonthExpenses);
+
+        aggregateLastMonthPieData(lastMonthExpenses);
+        aggregateLastMonthBarData(lastMonthExpenses);
+        aggregatethisYearBarData(thisYearExpenses);
+
+        refreshData();
+        window.dispatchEvent(new Event('resize'));
+        // });
+        
       }]);
 })();
 (function() {
