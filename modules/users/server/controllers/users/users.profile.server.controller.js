@@ -50,6 +50,26 @@ exports.update = function(req, res) {
   }
 };
 
+exports.getPicture = function(req, res) {
+  var userId = req.params.userPictureId;
+  User.findOne({ '_id': userId }).exec(function(err, user) {
+    if (!err && !!user) {
+      var picPath = user.profileImageURL ? user.profileImageURL : 'modules/users/client/img/profile/default.png';
+      picPath = path.join(__dirname, '../../../../../', picPath);
+      fs.stat(picPath, function (err, stat) {
+        if (err) 
+          return res.status(400).jsonp({ error: 'could not load image' });
+        var img = fs.readFileSync(picPath);
+        res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+    // res.contentLength = stat.size;
+        res.end(img);
+      });
+    } else {
+      return res.status(400).jsonp({ error: 'no such user' });
+    }
+  });
+};
+
 /**
  * Update profile picture
  */

@@ -30,6 +30,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/users/:userId',
       permissions: 'get'
+    }, {
+      resources: '/api/users/picture/:userId',
+      permissions: '*'
     }]
   }]);
 };
