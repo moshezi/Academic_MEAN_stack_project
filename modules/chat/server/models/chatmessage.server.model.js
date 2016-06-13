@@ -27,9 +27,13 @@ var ChatmessageSchema = new Schema({
     type: String,
     default: ''
   },
-  username: {
-    type: String,
-    default: ''
+  to: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+  sender: {
+    type: Schema.ObjectId,
+    ref: 'User'
   }
 });
 

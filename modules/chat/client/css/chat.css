@@ -13,3 +13,10 @@
   width: 28px;
   border-radius: 50%;
 }
+.chat-customer:hover {
+  cursor: pointer;
+}
+
+.client-message {
+  margin: 20px;
+}

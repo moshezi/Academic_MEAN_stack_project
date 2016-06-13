@@ -1,29 +1,63 @@
 <!-- The chat view -->
 <section class="container" ng-controller="ChatController">
-  <div class="page-header">
-    <h1>Chat</h1>
-  </div>
-  <!-- The message form -->
-  <form class="col-xs-12 col-md-offset-4 col-md-4" ng-submit="sendMessage();">
-    <fieldset class="row">
-      <div class="input-group">
-        <input type="text" id="messageText" name="messageText" class="form-control" ng-model="messageText" placeholder="Enter new message">
-        <span class="input-group-btn">
+    <div class="page-header">
+        <h1>Chat</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div ng-show="isAdvisor">Your clients:</div>
+            <div ng-show="!isAdvisor">Your advisor:</div>
+        </div>
+        <!-- The message form -->
+        <div class="col-xs-12 col-md-4">
+            <form ng-submit="sendMessage()" ng-show="(!isAdvisor && !!user.advisor) || (isAdvisor && customers && customers.length > 0)">
+                <fieldset class="row">
+                    <div class="input-group">
+                        <input type="text" id="messageText" name="messageText" class="form-control" ng-model="messageText" placeholder="Enter new message">
+                        <span class="input-group-btn">
           <button type="submit" class="btn btn-primary" ng-disabled="!messageText.length">Submit</button>
         </span>
-      </div>
-    </fieldset>
-  </form>
-  <ul class="list-unstyled">
-    <!-- List all messages -->
-    <li class="col-xs-12 col-md-offset-4 col-md-4 chat-message" ng-repeat="message in messages">
-      <small class="pull-right text-muted" ng-bind="message.created | date:'mediumTime'"></small>
-      <img ng-src="{{message.profileImageURL}}" alt="{{message.username}}" class="pull-left chat-profile-image" />
-      <div class="pull-left chat-message-details">
-        <strong ng-bind="message.username"></strong>
-        <br>
-        <span ng-bind="message.text"></span>
-      </div>
-    </li>
-  </ul>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div ng-show="isAdvisor">
+                <div ng-show="!customers || customers.length === 0">No customers found</div>
+                <div ng-show="customers && customers.length > 0">
+                    <div class="list-group">
+                        <a data-ng-repeat="customer in customers" class="list-group-item chat-customer" ng-click="chooseCustomer(customer)">
+                            <small class="list-group-item-text">
+                              <span >{{customer.displayName ? customer.displayName : 'Deleted User'}}</span>
+                            </small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="!isAdvisor">
+                <div ng-show="!user.advisor">You have no advisor selected</div>
+                <div ng-show="user.advisor" ng-bind="user.advisor.displayName"></div>
+            </div>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
+            <div class="client-message" ng-show="chosenCustomer">
+                <span >Chatting with: "{{chosenCustomer.displayName}}"</span>
+            </div>
+            <ul class="list-unstyled row" ng-show="(!isAdvisor && !!user.advisor) || (isAdvisor && customers && customers.length > 0 && !!chosenCustomer)">
+                <!-- List all messages -->
+                <li class="col-xs-12 chat-message" ng-repeat="message in messages">
+                    <small class="pull-right text-muted" ng-bind="message.created | date:'mediumTime'"></small>
+                    <img ng-src="{{message.profileImageURL}}" alt="{{message.sender.username}}" class="pull-left chat-profile-image" />
+                    <div class="pull-left chat-message-details">
+                        <strong ng-bind="message.sender.username"></strong>
+                        <br>
+                        <span ng-bind="message.text"></span>
+                    </div>
+                </li>
+            </ul>
+            <span ng-show="isAdvisor && customers && !chosenCustomer">Please choose a customer</span>
+        </div>
+    </div>
 </section>

@@ -1,22 +1,20 @@
 <section class="container">
-  <div class="page-header">
-    <h1>Expenses</h1>
-  </div>
-  <div class="list-group">
-    <a data-ng-repeat="expense in vm.currentCustomerExpenses"
-       data-ui-sref="expenses.view({ expenseId: expense._id })"
-       class="list-group-item">
-      <small class="list-group-item-text">
+    <div class="page-header">
+        <h1>Expenses</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="expense in vm.currentCustomerExpenses" data-ui-sref="expenses.view({ expenseId: expense._id })" class="list-group-item">
+            <small class="list-group-item-text">
         Posted on
         <span data-ng-bind="expense.expenseDate | date:'mediumDate'"></span>
         by
         <span data-ng-if="expense.user" data-ng-bind="expense.user.displayName"></span>
         <span data-ng-if="!expense.user">Deleted User</span>
       </small>
-      <h4 class="list-group-item-heading" data-ng-bind="expense.name"></h4>
-    </a>
-  </div>
-  <div class="alert alert-warning text-center" data-ng-if="vm.expenses.$resolved && !vm.expenses.length">
-    No Expenses yet, why don't you <a data-ui-sref="expenses.create">create one</a>?
-  </div>
+            <h4 class="list-group-item-heading" data-ng-bind="expense.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-if="vm.expenses.$resolved && !vm.expenses.length">
+        No Expenses yet, why don't you <a data-ui-sref="expenses.create">create one</a>?
+    </div>
 </section>
