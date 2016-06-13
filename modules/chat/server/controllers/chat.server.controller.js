@@ -1,7 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  Chatmessage = mongoose.model('Chatmessage');
+  Chatmessage = mongoose.model('Chatmessage'),
+  User = mongoose.model('User');
 
 var msgNotifier;
 
@@ -18,11 +19,11 @@ module.exports = {
       var user = req.user;
       if (user.roles.indexOf('advisor') !== -1) {
         // An advisor is asking for messages
-        
+
 
       } else if (user.roles.indexOf('customer') !== -1) {
           // A customer is asking for messages
-          
+
 
       } else {
         res.status(400).send({ error: 'User is neither a customer nor an advisor' });
@@ -34,7 +35,7 @@ module.exports = {
         res.json(data);
       });
     }
-    
+
   },
   newMessage: function(req, res) {
     var self = this;
@@ -44,23 +45,32 @@ module.exports = {
       var user = req.user;
       var msg = new Chatmessage(req.body);
       msg.from = user.id;
-      msg
-      .save(function (err, newMsg) {
-        if (err) {
-          return res.status(400).send({
-            message: { error: err }
-          });
-        } else {
-          res.jsonp(newMsg);
-          Chatmessage.findOne({ _id: newMsg.id })
-            .populate('sender').populate('to')
-        // .where({ createdAt: { $gte: lastTenMinutes } })
-            .exec(function(err, msg) {
-              if (!err && msg && !!msgNotifier)
-                msgNotifier(msg);
+      if (!msg.sender || !msg.to)
+        return res.status(400).send({ error: 'must specify both sender and to' });
+      User.find({ $or: [{ '_id': msg.sender }, { '_id': msg.to }] })
+        .exec(function(err, results) {
+          if (err || results.length !== 2) {
+            return res.status(400).send({ error: 'wrong sender and to sent' });
+          } else {
+            msg
+            .save(function (err, newMsg) {
+              if (err) {
+                return res.status(400).send({
+                  message: { error: err }
+                });
+              } else {
+                res.jsonp(newMsg);
+                Chatmessage.findOne({ _id: newMsg.id })
+                  .populate('sender').populate('to')
+              // .where({ createdAt: { $gte: lastTenMinutes } })
+                  .exec(function(err, msg) {
+                    if (!err && msg && !!msgNotifier)
+                      msgNotifier(msg);
+                  });
+              }
             });
-        }
-      });
+          }
+        });
     }
   }
 };
