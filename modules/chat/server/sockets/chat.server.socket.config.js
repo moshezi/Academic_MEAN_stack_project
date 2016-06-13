@@ -3,10 +3,15 @@
 
 
 var mongoose = require('mongoose'),
-  Chatmessage = mongoose.model('Chatmessage');
+  Chatmessage = mongoose.model('Chatmessage'),
+  ioConfig = require('../controllers/chat.server.controller.js');
 
 // Create the chat configuration
 module.exports = function (io, socket) {
+
+  ioConfig.setMessageNotifier(function(message) {
+    io.emit('chatMessage', message._doc);
+  });
 
   // Emit the status event when a new socket client is connected
   io.emit('chatMessage', {

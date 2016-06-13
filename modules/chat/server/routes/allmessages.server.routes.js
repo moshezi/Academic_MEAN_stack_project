@@ -8,4 +8,5 @@ module.exports = function(app) {
   // Routing logic
 
   app.get('/chat/allmessages', chat.allmessages);
+  app.put('/chat/allmessages', chat.newMessage);
 };
